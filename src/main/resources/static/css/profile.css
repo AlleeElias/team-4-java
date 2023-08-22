@@ -1,0 +1,197 @@
+h1 {
+    color: black!important;
+}
+
+h3 {
+    color: black!important;
+    font-size: 1.2em!important;
+}
+
+main {
+    margin-left: 0!important;
+    margin-right: 0!important;
+}
+
+.postsprofilepage {
+    max-width: 1000px;
+    margin: auto;
+}
+
+#list {
+    width: 100%;
+    column-count: 1;
+    column-gap: 1.875em;
+    column-fill: auto;
+}
+
+.postCardDivProfile {
+    -webkit-column-break-inside: avoid;
+    padding: 20px;
+}
+
+.imgarticle {
+    width: 100%;
+}
+
+.postpic {
+    width: 100%!important;
+}
+
+.sectionclass {
+    width: 100%!important;
+}
+
+.sectioncommentexplore {
+    width: 100%!important;
+}
+
+.inputCss {
+    width: 80%;
+}
+
+.noprofilepic {
+    background-color: #89b6a5!important;
+}
+
+/*noprofilepic but in purple for another account*/
+.purple {
+    background-color: rgb(211, 187, 250) !important;
+}
+
+/*nieuw post button on profilepage absolute so image won't shift*/
+.nieuwpost {
+    float: none!important;
+    margin-left: 73%!important;
+    margin-top: auto!important;
+}
+
+/*algemene button voor volgen en volgers, etc*/
+.followetcbtn {
+    color: #fff;
+    background-color: #343a40;
+    border: none;
+    padding: 5px;
+    margin: 10px;
+    min-width: 155px;
+    border-radius: 5px;
+    border-bottom: solid #89B6A5 5px;
+    font-style: italic;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.followetcbtn:hover {
+    color: #fff;
+    background-color: #23272b;
+    border-bottom: solid #89B6A5 5px !important;
+    text-decoration: none;
+    /*box-shadow: 14px 14px 20px #343a40, 14px 14px 20px #75bea2;*/
+}
+
+/*paarse button voor volgen en volgers, etc*/
+.followetcbtnpurple {
+    color: #fff;
+    background-color: #343a40;
+    border: none;
+    padding: 5px;
+    margin: 10px;
+    min-width: 155px;
+    border-radius: 5px;
+    border-bottom: solid #E8D7FF 5px;
+    font-style: italic;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.followetcbtnpurple:hover {
+    color: #fff;
+    background-color: #23272b;
+    border-bottom: solid rgb(211, 187, 250) 5px !important;
+    text-decoration: none;
+    /*box-shadow: 14px 14px 20px #343a40, 14px 14px 20px #bd8dff;*/
+}
+
+.hr-lines:after{
+    content: " ";
+    height: 2px;
+    width: 100%;
+    position: absolute;
+    /* top: 43%; */
+    left: 0;
+    background: #89B6A5;
+    z-index: -1;
+}
+
+.profileposts {
+    padding-top: 10px;
+}
+
+.profileinfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.profilepic {
+    width: 250px;
+    border-radius: 40px;
+    border: 2px solid black;
+}
+
+/*div waar alle buttons in zitten*/
+.buttonsdiv {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/*buttons op 2de lijn*/
+.clothesbtn {
+    margin-top: 20px;
+    flex: 1 0 50%;
+}
+
+/*buttons op 1ste lijn*/
+.flex {
+    flex: 1 0 50%;
+}
+
+/*de linkse buttons dichter naar center*/
+.left {
+    float: right;
+    margin-right: 20px;
+}
+
+/*de rechtse buttons dichter naar center*/
+.right {
+    float: left;
+}
+
+@media only screen and (min-width: 700px) {
+    #list {
+        column-count: 2;
+    }
+}
+
+@media only screen and (min-width: 760px) {
+    .nieuwpost {
+        position: absolute;
+        right: 96.5px;
+        margin-left: 0;
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+}
+
+@media only screen and (min-width: 996px) {
+    #list {
+        column-count: 3;
+    }
+
+    .postCardDivProfile {
+        padding-bottom: 0.9em;
+        padding-top: 0.9em;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

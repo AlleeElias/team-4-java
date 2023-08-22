@@ -1,0 +1,130 @@
+.backbuttonFollow {
+    position: absolute;
+    left: 0;
+    margin-left: 10%;
+}
+
+.followerpage {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#test2 {
+    display: none;
+}
+
+.person {
+    padding: 5px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #343a40;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: left;
+    border: 0.5px solid #00000030;
+    border-bottom: solid #89B6A5 5px !important;
+    width: 400px;
+}
+
+/*making pictures or logos absolute on certain places*/
+.absolute {
+    position: absolute;
+}
+
+.person:hover {
+    box-shadow: 14px 14px 20px #343a40;
+    cursor: pointer;
+}
+
+.sectionbioname {
+    padding-left: 50px!important;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 20px;
+}
+
+.sectionbiofullname {
+    flex: 1 0 90%;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-left: 50px;
+    font-size: 13px;
+}
+
+.commentpic {
+    width: 37px!important;
+    height: 35px!important;
+    border: 1px solid black;
+    z-index: 1!important;
+}
+
+
+/*test*/
+p {
+    color: white!important;
+}
+
+.searchbar {
+    width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    border: 0.5px solid #00000045;
+    background-color: #ececec;
+    /*box-shadow: 14px 14px 20px #cbced1;
+    border: 0.5px solid #00000030;
+    background-color: #e3e3e3;*/
+}
+
+/*follower and following button on followerspage in small design*/
+.buttonchange {
+    margin-top: 20px;
+    width: 40%;
+    height: 35px;
+    box-shadow: 14px 14px 20px #cbced1, -14px -14px 20px white;
+    border: 0.5px solid #343a40;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #343a40;
+}
+
+.noprofilepic {
+    width: 40px!important;
+    height: 39px;
+}
+
+
+/*standard the followingbutton is pressed in small design*/
+#idbuttonfollowing {
+    border-bottom: solid #89B6A5 5px;
+}
+
+/*to hide the scrollbar*/
+::-webkit-scrollbar {
+    display: none !important;
+}
+
+@media only screen and (min-width: 760px) {
+    .searchbar {
+        width: 300px;
+        height: 30px;
+    }
+
+    .buttonchange {
+        display: none;
+    }
+
+    #test2 {
+        display: block!important;
+    }
+
+    #test1 {
+        display: block!important;
+    }
+
+    .followingdiv {
+        margin-right: 30px;
+    }
+}

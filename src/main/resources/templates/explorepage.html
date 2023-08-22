@@ -1,0 +1,162 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Explore</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<aside>
+    <div class="filterContainer position-fixed">
+        <button onclick="filterBTN()" type="button" class="btn btn-dark" data-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample" id="btnFilters">+</button>
+        <div class="collapse" id="collapseExample">
+            <form class="card card-body scroll displayChange">
+                <strong for="naamPerson">Naam:</strong>
+                <input th:if="${naamPerson==null}" type="text" id="naamPerson" name="naamPerson" placeholder="username">
+                <input th:if="${naamPerson!=null}" type="text" id="naamPerson" name="naamPerson" th:value="${naamPerson}" placeholder="username">
+                <strong>Stijl:</strong>
+                <select name="style" placeholder="Kies een stijl!">
+                    <option th:value="${null}" th:text="Alle"></option>
+                    <option th:each="s : ${styles}" th:value="${s}" th:text="${s}"></option>
+                </select>
+                <div sec:authorize="isAuthenticated()">
+                    <strong>In de buurt:</strong>
+                    <label for="noClose" >Nee</label>
+                    <input type="radio" id="noClose" name="closeby" value="false" th:checked="${closeby == false || closeby == null}">
+                    <label for="yesClose">Ja</label>
+                    <input type="radio" id="yesClose" name="closeby" value="true" th:checked="${closeby == true}"><br>
+                    <input type="range" min="1" max="50" id="slider" name="slider" onchange="updateTextInput(this.value);">
+                    <span id="sliderId">26</span>
+                </div>
+                <strong for="minprijs">Minimum:</strong>
+                <input th:if="${minPrice==null}" type="number" min="0" name="minPrijs" placeholder="0" id="minprijs">
+                <input th:if="${minPrice!=null}" th:value="${minPrice}" type="number" min="0" name="maxPrijs" placeholder="0" id="maxprijs">
+                <strong for="maxprijs">Maximum:</strong>
+                <input th:if="${maxPrice==null}" type="number" min="0" name="maxPrijs" placeholder="0" id="maxprijs">
+                <input th:if="${maxPrice!=null}" th:value="${maxPrice}" type="number" min="0" name="maxPrijs" placeholder="0" id="maxprijs">
+                <input type="hidden" name="latitude" id="latitude" th:value="${latitude}">
+                <input type="hidden" name="longitude" id="longitude" th:value="${longitude}">
+                <input class="btn-dark borderBtn" type="submit" value="Zoek!">
+            </form>
+        </div>
+    </div>
+
+</aside>
+<main>
+    <div th:if="${fashposts==null || fashposts.size()==0}">
+        <h1>Niets gevonden! Probeer iets anders te zoeken.</h1>
+    </div>
+    <div class="postCardDiv" th:each="fashUser : ${fashposts}">
+        <a class="postCard" th:if="${fashUser!=null}" th:href="@{|/postDetails/${fashUser.getId()}}">
+            <section class="sectionclass">
+                <form class="linktoprofilepage" method="get" th:action="@{|/profilepage/${fashUser.getPoster().getId()}|}">
+                    <button class="linktoprofilepagebtn" type="submit">
+                        <img class="exploreprofilepic" th:src="|/u/image/${fashUser.getPoster().getId()}|">
+                        <h1 class="sectionrows name" th:text="${fashUser.getPoster().getUsername()}"></h1>
+                    </button>
+                </form>
+                <div sec:authorize="isAuthenticated()">
+                    <div class="buttonsdiv formbtn" th:if="${curUser !=null && curUser.following.contains(fashUser.getPoster())}">
+                        <form method="get" th:action="@{|/follow/${fashUser.getPoster().getId()}|}">
+                            <button type="submit" class="btn-dark borderBtn">Ontvolgen</button><br>
+                        </form>
+                    </div>
+                    <div class="buttonsdiv formbtn" th:unless="${curUser!=null &&curUser.following.contains(fashUser.getPoster())}">
+                        <form method="get" th:action="@{|/follow/${fashUser.getPoster().getId()}|}">
+                            <button type="submit" class="btn-dark borderBtn">Volgen</button><br>
+                        </form>
+                    </div>
+                </div>
+                <article>
+                    <img class="postpic" th:src="|/p/image/${fashUser.getId()}|">
+                </article>
+                <strong><p class="sectionbioname" th:text="${fashUser.getPoster().getUsername()}"></p></strong>
+                <p class="sectionbiotext"th:text="${fashUser.getText()}"></p>
+                <div class="commentsothers" th:if="${fashUser.getOneComment()}">
+                    <form method="get" th:action="@{|/profilepage/${fashUser.getOneComment().getUser().getId()}|}">
+                        <button class="linktoprofilepagebtn" type="submit">
+                            <div th:if="${fashUser.getOneComment().getUser().getProfilePic()}">
+                                <img class="exploreprofilepic commentpic" th:src="|/u/image/${fashUser.getOneComment().getUser().getId()}|">
+                            </div>
+                            <div th:unless="${fashUser.getOneComment().getUser().getProfilePic()}">
+                                <i class="noprofilepic fa fa-fw fa-user"></i>
+                            </div>
+                            <strong><p class="sectionbioname" th:text="${fashUser.getOneComment().getUser().getUsername()}"></p></strong>
+                        </button>
+                    </form>
+                    <p th:if="${fashUser.getOneComment()!=null}" class="sectionbiotext"th:text="${fashUser.getPoster().getLastPost().getOneComment().getText()}"></p>
+                </div>
+            </section>
+        </a>
+        <section class="sectioncommentexplore" sec:authorize="isAuthenticated()">
+            <form>
+                <input type="hidden" name="id" th:value="${fashUser.getId()}">
+                <input required="required" class="inputCss" type="text" name="commentText" placeholder="Jouw comment">
+                <button type="submit" class="btn-dark borderBtn">Plaatsen</button><br>
+            </form>
+        </section>
+    </div>
+    <button class="btn-dark btn" onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+</main>
+<script type="text/javascript">
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            document.getElementById("longitude").value = position.coords.longitude;
+            document.getElementById("latitude").value = position.coords.latitude;
+        });
+    } else {
+        document.getElementById("longitude").value = null;
+        document.getElementById("latitude").value = null;
+    }
+</script>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+<script>
+
+    function updateTextInput(val) {
+        document.getElementById('sliderId').innerText=val;
+    }
+    //Om het plusje in een minnetje te zetten en omgekeerd
+    function filterBTN(){
+        var btnFilters=document.getElementById("btnFilters");
+        if(btnFilters.innerText=="+"){
+            btnFilters.innerText="-";
+        }
+        else {
+            btnFilters.innerText="+";
+        }
+    };
+
+    //Om de button te krijgen
+    var mybutton = document.getElementById("myBtn");
+
+    // als de gebruiker 20px scrollt naar beneden, dan is de button zichtbaar
+    window.onscroll = function () {
+        scrollFunction()
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // als de gebruiker op de button klikt, dan wordt er gescrollt naar de top van de pagina
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    // de title van de pagina verkrijgen en doorsturen naar het id 'titlebalk' in de head/foot template
+    document.getElementById("titlebalk").innerHTML = document.title;
+
+    //als de pagina terug herladen wordt via teruggaan functie in internet, dan herstelt die de scroll positie
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+</body>
+</html>

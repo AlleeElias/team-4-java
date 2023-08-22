@@ -1,0 +1,78 @@
+.containerCss {
+    border-radius: 20px;
+    padding: 40px;
+    box-sizing: border-box;
+    border: solid #89b6a5 8px;
+    color: white;
+    background: #343a40;
+    box-shadow: rgb(9 30 66 / 25%) 0 1px 1px, rgb(9 30 66 / 13%) 0 0 1px 1px;
+    margin-top: 100px;
+    width: 350px;
+    height: auto;
+}
+
+
+.mainForm {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    place-items: center;
+    font-family: "Arial Black";
+    font-size: 14px;
+    margin-bottom: 150px;
+}
+
+.fashLogo{
+    max-width:80%;
+    height:auto;
+}
+
+.cancel{
+    margin: 5px;
+    text-decoration: none;
+}
+
+.inputCss {
+    padding: 10px;
+    height: 25px;
+    font-size: 14px;
+    border-radius: 15px;
+}
+
+.error{
+    margin: 15px;
+    text-align: center;
+    padding-top: 75px;
+}
+
+@media only screen and (min-width: 760px) {
+
+    header{
+        border-top: none;
+        border-bottom: 2px solid black;
+        position: fixed;
+        top: 0;
+        bottom: unset;
+    }
+
+    main{
+        margin-top: 100px;
+    }
+    #myLinksPhone{
+        display: none;
+    }
+
+    #myLinksPc{
+        display: block;
+    }
+
+    footer{
+        display: block;
+    }
+
+    .mainForm{
+        margin-bottom: 50px;
+    }
+}

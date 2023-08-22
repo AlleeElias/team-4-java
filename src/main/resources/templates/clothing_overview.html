@@ -1,0 +1,52 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Clothing</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<aside>
+    <div class="filterContainer position-fixed">
+        <button onclick="filterBTN()" type="button" class="btn btn-dark" data-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample" id="btnFilters">+</button>
+        <div class="collapse" id="collapseExample">
+            <form class="card card-body scroll displayChange">
+                <input th:if="${naampje!=null}" th:value="${naampje}" type="text" placeholder="Zoek op naam!" name="kledingname">
+                <input th:if="${naampje==null}" type="text" placeholder="Zoek op naam!" name="kledingname">
+                Sorteren op datum?
+                <input th:checked="${date!=null && date}" type="radio" name="date" value="true" id="yes"><label for="yes">Ja</label>
+                <input th:checked="${date == null || !date}" type="radio" name="date" value="false" id="no"><label for="no">Nee</label>
+                <button type="submit" class="btn-dark borderBtn">Zoek!</button>
+            </form>
+        </div>
+    </div>
+</aside>
+<main>
+    <article>
+        <a style="float: left; margin-top: 0%" type="button" th:href="@{|/profilepage/${user.getId()}|}" class="btn-dark borderBtn"><<</a>
+        <h2 th:if="${ownClothes!=null}" th:text="|Opgeslagen kleren van ${user.getUsername()}|"></h2>
+        <h2 th:if="${ownClothes==null}" th:text="|Kleren gepost door ${user.getUsername()}|"></h2>
+        <section th:each="cloth : ${clothes}">
+            <a th:href="@{|/clothingdetail/${cloth.getId()}|}">
+                <h2 class="btn-dark borderBtn" th:text="${cloth.getNaam()}"></h2>
+            </a>
+        </section>
+    </article>
+</main>
+<script>
+    //Om het plusje in een minnetje te zetten en omgekeerd
+    function filterBTN(){
+        var btnFilters=document.getElementById("btnFilters");
+        if(btnFilters.innerText=="+"){
+            btnFilters.innerText="-";
+        }
+        else {
+            btnFilters.innerText="+";
+        }
+    };
+</script>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+</body>
+</html>

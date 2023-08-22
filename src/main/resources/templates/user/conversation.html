@@ -1,0 +1,159 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/messages.css}" href="/css/messages.css"/>
+    <title th:text="${convo.getConvoNaam()}">Placeholder</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<script th:inline="javascript" type="text/javascript">
+
+    function startScript() {
+        //de eerste keer data laden
+        loadData();
+        //Daarna enkel kijken of een nieuw bericht komt en dan pas alle data opnieuw laden
+        setInterval(checkData, 5000);
+    };
+
+    function checkData() {
+        let id = document.getElementById("hiddenID").innerText;
+        let sizes=document.getElementById("hiddenConvoSize");
+        var xhr=new XMLHttpRequest();
+        xhr.open('GET','/getMessageSize/'+id);
+        xhr.onreadystatechange = function () {
+            var DONE = 4; // readyState 4 means the request is done.
+            var OK = 200; // status 200 is a successful return.
+
+            if (xhr.readyState === DONE) {
+                console.log("DONE");
+                if (xhr.status === OK) {
+                    let sizefound=xhr.responseText;
+                    if(sizefound.localeCompare(sizes.innerText) != 0){
+                        sizes.innerText=sizefound;
+                        loadData();
+                        console.log("data loaded");
+                    }
+                    //console.log(xhr.responseText);
+                    //console.log("status ok");
+                } else {
+                    console.log('Error: ' + xhr.status); // An error occurred during the request.
+                }
+            }
+        };
+        xhr.send(null);
+    };
+
+    //Dit word aangeroepen als een nieuwe message bestaat zodat niet constant lange queries lopen
+    function loadData() {
+        let aantalMessages = document.getElementById("hiddenSize");
+        //haal de id op
+        let id = document.getElementById("hiddenID").innerText;
+        console.log(id);
+        //document.getElementById("shownID").innerHTML(id);
+        console.log("werk aub");
+        //Een nieuwe http request maken (deze stuurt mappings door)
+        var xhr = new XMLHttpRequest();
+        //Stuur een mapping door
+        xhr.open('GET', '/getconvo/' + id);
+        let arrayConvo;
+        //xhr.open('GET', '/testje');
+        //xhr.send();
+        xhr.onreadystatechange = function () {
+            var DONE = 4; // readyState 4 means the request is done.
+            var OK = 200; // status 200 is a successful return.
+
+            if (xhr.readyState === DONE) {
+                console.log("DONE");
+                if (xhr.status === OK) {
+                    arrayConvo = xhr.responseText;
+                    //We zetten de string om naar JSON om te kunnen gebruiken
+                    arrayConvo = JSON.parse(arrayConvo);
+                    arrayConvo.sort(function (a, b) {
+                        return a.id - b.id;
+                    });
+                    displayData(arrayConvo);
+                    console.log(xhr.responseText); // 'This is the returned text.'
+                    console.log("status ok");
+                } else {
+                    console.log('Error: ' + xhr.status); // An error occurred during the request.
+                }
+            }
+        };
+        xhr.send(null);
+    };
+
+    //Toont de data binnen html
+    function displayData(arrayConvo) {
+        //zoek de huidige user
+        let curUser = document.getElementById("hiddenUSERID");
+        //Zoek het element waar de messages in zullen komen
+        let newMessages = document.getElementById('messages');
+        //We maken het element leeg om de messages te laden
+        newMessages.innerHTML = "";
+        //Printen voor debugging
+        console.log(arrayConvo);
+        //Een loop om door de convo te gaan en elke message te zien
+        for (var i = 0; i < arrayConvo.length; i++) {
+            //Elementen maken die in elke message zullen staan
+            let curSegment = document.createElement("section");
+            let curDiv = document.createElement("div");
+            let textnode = document.createTextNode(arrayConvo[i].text);
+            let namenode = document.createElement("h3");
+            let nametext = document.createTextNode(arrayConvo[i].sender.username)
+            if (arrayConvo[i].sender.username === curUser.innerText) {
+                //Een verstuurd bericht krijgt een andere klasse
+                curDiv.setAttribute("class", "sentMessage");
+            } else {
+                //Een ontvangen bericht krijgt een andere klasse
+                curDiv.setAttribute("class", "receivedMessage");
+            }
+            //Toekennen van attributen aan de elementen
+            namenode.appendChild(nametext);
+            curDiv.appendChild(namenode);
+
+            curSegment.setAttribute("class", "message");
+            curDiv.appendChild(textnode);
+
+            curSegment.append(curDiv);
+            newMessages.appendChild(curSegment);
+        }
+        ;
+        //Naar het laatste bericht gaan met auto scroll
+        var objDiv = document.getElementById("messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    };
+</script>
+<body onload="startScript()" class="messagebody">
+<p style="display: none" th:text="${convo.getId()}" id="hiddenID"></p>
+<p id="hiddenUSERID" style="display: none" th:text="${loggedUser.getUsername()}"></p>
+<p style="display: none" id="hiddenConvoSize" th:text="${convo.getMessages().size()}"></p>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<main sec:authorize="isAuthenticated()" class="messagemain">
+    <article class="messageButtonsTop">
+        <a class="btn btn-dark backbuttonMessages" th:href="@{/messages}">Terug</a>
+        <form th:action="@{|/adduser/${convo.getId()}|}">
+            <select name="id" class="messageAddUser form-select">
+                <option th:if="${!convo.getUsers().contains(fuser)}" th:value="${fuser.getId()}"
+                        th:each="fuser: ${loggedUser.findBoth()}" th:text="${fuser.getUsername()}"></option>
+            </select>
+            <button class="btn btn-dark" type="submit">+</button>
+        </form>
+    </article>
+    <div id="messages" class="messages">
+        Berichtjes laden...
+    </div>
+    <article>
+        <form class="messageForm">
+            <input class="form-control" name="text" type="text" placeholder="Begin met typen..." required="required">
+            <button class="btn btn-dark" type="submit">Stuur!</button>
+        </form>
+    </article>
+</main>
+<main sec:authorize="!isAuthenticated()">
+    Niet aangemeld
+</main>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+<script th:replace="fragments/head_foot :: script"></script>
+</body>
+</html>

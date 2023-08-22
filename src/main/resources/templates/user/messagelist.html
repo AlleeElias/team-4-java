@@ -1,0 +1,57 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+  <link rel="stylesheet" type="text/css" media="all"
+        th:href="@{/css/messages.css}" href="/css/messages.css"/>
+  <title>Messages</title>
+  <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<body class="messagelistbody">
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<main sec:authorize="isAuthenticated()">
+  <button class="btn-dark btnToggler" onclick="toggleDivs()">
+    <h3 id="buttonToggle">>></h3>
+  </button>
+  <div id="userDiv" style="display: none;" class="convoList">
+    <article>
+      <section th:each="follower : ${followers}">
+        <a class="btn btn-dark" th:href="@{|/checkconvo/${follower.getId()}|}">
+          <h2 th:text="${follower.getUsername()}"></h2>
+        </a>
+      </section>
+    </article>
+  </div>
+  <div id="convoDiv">
+    <article th:each="convo : ${convos}" class="convoList">
+      <a th:href="@{|/messages/${convo.getId()}|}" class="btn btn-dark">
+        <h2 th:text="${convo.getConvoNaam()}"></h2>
+        <h3 th:if="${convo.readUsers==null || !convo.readUsers.contains(loggedIn)}">Ongelezen!</h3>
+        <h3 th:if="${convo.readUsers!=null && convo.readUsers.contains(loggedIn)}">Gelezen!</h3>
+      </a>
+    </article>
+  </div>
+</main>
+<main sec:authorize="!isAuthenticated()">
+  Niet aangemeld
+</main>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+<script th:replace="fragments/head_foot :: script"></script>
+<script>
+  function toggleDivs() {
+    var users = document.getElementById("userDiv");
+    var convos = document.getElementById("convoDiv");
+    var button=document.getElementById("buttonToggle");
+    if (users.style.display === "none") {
+      users.style.display = "block";
+      convos.style.display="none"
+      button.innerText="<<";
+    } else {
+      convos.style.display="block"
+      users.style.display = "none";
+      button.innerText = ">>";
+    }
+  }
+</script>
+</body>
+</html>

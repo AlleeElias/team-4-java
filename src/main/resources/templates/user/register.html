@@ -1,0 +1,41 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/register.css}" href="/css/register.css"/>
+    <title>Register</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<main class="mainForm">
+    <div class="containerCss">
+        <div>
+            <img th:src="@{/img/LogoFashTransparant3.png}" class="fashLogo">
+        </div>
+        <h2>REGISTER:</h2>
+        <form th:action="@{|/register|}" th:object="${valid}" method="POST" enctype="multipart/form-data" >
+            <div class="error" th:if="${#fields.hasErrors('*')}">ERROR - data is not saved</div>
+            <div th:if="${error!=null}">
+                <span th:text="${error.getDefaultMessage()}"></span>
+            </div>
+            <label for="firstName">VOORNAAM:</label>
+            <input class="inputCss" type="text" id="firstName" th:field="*{first_name}" th:errorclass="fieldError"><br>
+            <label for="lastName">ACHTERNAAM:</label>
+            <input class="inputCss" type="text" id="lastName" th:field="*{last_name}" th:errorclass="fieldError"><br>
+            <label for="Username">GEBRUIKERSNAAM:</label>
+            <input class="inputCss" type="text" id="Username" th:field="*{username}" th:errorclass="fieldError"><br>
+            <label for="Password">WACHTWOORD: </label>
+            <input class="inputCss" type="password" id="Password" th:field="*{password}" th:errorclass="fieldError"><br>
+            <label for="image" class="btn-dark borderInputFile"><i class="fa fa-download" aria-hidden="true"></i> KIES JE PROFIELFOTO:</label>
+            <input class="inputfile" type="file" name="image" id="image" accept="image/png, image/jpeg"><br>
+            <input type="submit" value="Register" class="btn-dark borderPrpl">
+            <div>
+                <a href="/" class="cancel">cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+<script th:replace="fragments/head_foot :: script"></script>
+</body>

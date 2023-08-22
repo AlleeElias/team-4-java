@@ -1,0 +1,97 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+    <title th:text="${post.getPoster().getUsername()}">Info</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   </head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<main class="container">
+    <div th:if="${user!=null &&poster.equals(user)}">
+        <a th:href="@{'/editpost/' + ${post.id}}">
+            <input type="button" value="Edit post" class="btn-dark borderBtn" style="text-align:center">
+        </a>
+        <input type="button" value="Delete post" class="btn-dark borderBtn" style="text-align:center" data-toggle="modal"
+               data-target="#myModal">
+    </div>
+    <br>
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Post verwijderen?</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn"
+                                data-dismiss="modal">Annuleren</button>
+                        <a th:href="@{'/deletepost/' + ${post.id}}"><button
+                                type="button" class="btn btnModal">Verwijderen</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div th:if="${post}">
+        <article class="postDetails">
+            <section class="sidePic borderGrid">
+                <img class="picDetail" th:src="|/p/image/${post.getId()}|">
+            </section>
+            <section class="postitems borderGrid">
+                <h2 th:text="|${post.getPoster().getUsername()}|"></h2>
+                <p th:if="${post.getText()!=null}" th:text="${post.getText()}"></p>
+                <p th:unless="${post.getText()!=null}">Deze post heeft geen tekst :(</p>
+                <h3 class="pad" th:text="|Posted in: ${post.getLocation()}|"></h3>
+                <h2>Clothes:</h2>
+                <a th:each="item : ${post.getClothes()}" th:href="@{|/clothingdetail/${item.getId()}|}">
+                    <span type="button"  class="btn-dark borderBtn" th:text="${item.getNaam()}"></span>
+                </a>
+            </section>
+        </article>
+        <article sec:authorize="isAuthenticated()">
+            <div class="container">
+                <div class="col">
+                    <div class="comment-wrapper">
+                        <div class="panel-heading">
+                            <h2>Comments</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form>
+                                <textarea class="form-control" type="text" name="commentText" placeholder="Jouw comment" rows="3"></textarea>
+                                <br>
+                                <button type="submit" class="btn-dark borderPrpl">Plaatsen</button>
+                                <div class="clearfix"></div>
+                                <hr>
+                            </form>
+                            <ul class="media-list" th:each="comment : ${comments}">
+                                <li class="media">
+                                    <a th:href="@{|/profilepage/${comment.getUser().getId()}|}" class="pull-left">
+                                        <img th:src="|/u/image/${comment.getUser().getId()}|" alt="" class="img-circle">
+                                    </a>
+                                    <div class="media-body alineLeft">
+                                        <strong class="text-success" th:text="${comment.getUser().getUsername()}"></strong>
+                                        <p th:text="${comment.getText()}"></p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </div>
+    <div class="postDetails" th:unless="${post}">
+        <p>No post was chosen</p>
+    </div>
+
+</main>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+<script th:replace="fragments/head_foot :: script"></script>
+</body>
+</html>

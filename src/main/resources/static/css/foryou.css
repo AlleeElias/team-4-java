@@ -1,0 +1,41 @@
+@media only screen and (min-width: 930px) {
+    .foryoumain{
+        margin-left: 5%;
+        margin-right: 5%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+    }
+    .foryoucard{
+        margin-top: 0%;
+        width: 15%; !important;
+        height: 750px;!important;
+    }
+    .foryouarticle{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        overflow: hidden;
+        height: 450px;!important;
+        background-color: lightgray;
+    }
+    .foryouarticle .postpic{
+        overflow: hidden;
+        height: auto;!important;
+    }
+    .commentsothers{
+        height: 50px;
+    }
+}
+.foryousection{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    text-align: left;
+    max-width: 419px;
+    margin-top: 50px;
+    padding-bottom: 20px;
+}

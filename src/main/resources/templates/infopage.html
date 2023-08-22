@@ -1,0 +1,49 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Info</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/infopage.css}" href="/css/infopage.css"/>
+</head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<main>
+    <article class="infopage">
+        <h1>Wat is Fash?</h1>
+        <p>
+            Fash zal een website worden waar je je outfit op kan delen en andere outfits kan bekijken. Bovendien zal elke outfit links bevatten zodat je snel en gemakkelijk de kleren kan kopen die je mooi vindt!
+        </p>
+        <div class="grid">
+            <section>
+                <h2>Bedacht door:</h2>
+                <lu>
+                    <li>Brittney De Maeyer</li>
+                    <li>Thomas De Smet</li>
+                    <li>Lauranne Vandeputte</li>
+                    <li>Myrthe Cleas</li>
+                </lu>
+            </section>
+            <section>
+                <h2>Uitgewerkt door:</h2>
+                <lu>
+                    <li>Elias Neel</li>
+                    <li>Brent Budts</li>
+                    <li>Matthew De Schepper</li>
+                    <li>Ibrahim El Moudden</li>
+                </lu>
+            </section>
+        </div>
+        <p>Wij zijn enkele studenten uit Thomas More van
+            <a href="https://www.thomasmore.be/opleidingen/professionele-bachelor/media-en-entertainment-business-overzicht/media-en-entertainment-business">Media en Entertainment Business</a>
+             en
+            <a href="https://www.thomasmore.be/opleidingen/graduaat/programmeren-dag-avondonderwijs/programmeren-dagonderwijs/antwerpen-0">graduaat programmeren</a>
+            die samen dit project aanpakken.
+        </p>
+        <strong><p>Samen zullen we er iets mooi van maken!</p></strong>
+    </article>
+</main>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+<script th:replace="fragments/head_foot :: script"></script>
+</body>
+</html>

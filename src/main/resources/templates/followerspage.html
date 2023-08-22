@@ -1,0 +1,110 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/library.css}" href="/css/library.css"/>
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/profile.css}" href="/css/profile.css"/>
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/posts.css}" href="/css/posts.css"/>
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/followerspage.css}" href="/css/followerspage.css"/>
+    <title>volgers</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<main>
+    <div th:if="${user}">
+        <a class="btn btn-dark backbuttonFollow" th:href="@{|/profilepage/${user.getId()}|}">Terug</a>
+        <h1 th:text="${user.getUsername()}"></h1>
+        <form>
+            <i class="fa fa-fw fa-search"></i>
+            <input class="searchbar" type="text" id="keyword" name="keyword" th:value="${keyword}" placeholder="Zoek">
+        </form>
+        <button id="idbuttonfollower" class="buttonchange" onclick="getfollower()" title="change">volgers</button>
+        <button id="idbuttonfollowing" class="buttonchange" onclick="getfollowing()" title="change">volgend</button>
+        <div class="followerpage">
+            <div class="followingdiv" id="test1">
+                <h2 th:text="${nrfollowing + ' Volgend'}">aantal volgend</h2>
+                <div th:each="followingPerson : ${following}">
+                    <form method="get" th:action="@{|/profilepage/${followingPerson.getId()}|}">
+                        <button class="person"  type="submit">
+                            <div th:if="${followingPerson.getProfilePic()}">
+                                <img class="commentpic" th:src="|/u/image/${followingPerson.getId()}|">
+                            </div>
+                            <div th:unless="${followingPerson.getProfilePic()}">
+                                <i class="noprofilepic fa fa-fw fa-user"></i>
+                            </div>
+                            <strong><p class="sectionbioname" th:text="${followingPerson.getUsername()}"></p></strong>
+                            <p class="sectionbiofullname" th:text="${followingPerson.getFirst_name()} + ${followingPerson.getLast_name()}"></p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="followerdiv" id="test2">
+                <h2 th:text="${nrfollowers + ' Volgers'}">aantal volgers</h2>
+                <div th:each="followersPerson : ${followers}">
+                    <form method="get" th:action="@{|/profilepage/${followersPerson.getId()}|}">
+                        <button class="person"  type="submit">
+                            <div th:if="${followersPerson.getProfilePic()}">
+                                <img class="commentpic" th:src="|/u/image/${followersPerson.getId()}|">
+                            </div>
+                            <div th:unless="${followersPerson.getProfilePic()}">
+                                <i class="absolute noprofilepic fa fa-fw fa-user"></i>
+                            </div>
+                            <strong><p class="sectionbioname" th:text="${followersPerson.getUsername()}"></p></strong>
+                            <p class="sectionbiofullname" th:text="${followersPerson.getFirst_name()} + ${followersPerson.getLast_name()}"></p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${user}">
+        <p>No user was chosen</p>
+        <p>Please login first</p>
+        <form class="formbtn" method="get" th:action="@{|../../login}">
+            <button type="submit" class="btn-dark borderBtn">login</button>
+        </form>
+    </div>
+</main>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+<script>
+    // de title van de pagina verkrijgen en doorsturen naar het id 'titlebalk' in de head/foot template
+    document.getElementById("titlebalk").innerHTML = document.title;
+
+    //Om de button te krijgen
+    var followingdiv = document.getElementById("test1");
+    var followerdiv = document.getElementById("test2");
+    var followerbtndiv = document.getElementById("idbuttonfollower");
+    var followingbtndiv = document.getElementById("idbuttonfollowing");
+
+    // als de gebruiker op de button klikt, dan wordt er gescrollt naar de top van de pagina
+    function getfollower() {
+        if (followerdiv.style.display = "none") {
+            followerdiv.style.display = "block";
+            followingdiv.style.display = "none";
+        }
+        followerbtndiv.style.borderBottom = "solid #89B6A5 5px";
+        followingbtndiv.style.borderBottom = "none";
+    }
+
+    // als de gebruiker op de button klikt, dan wordt er gescrollt naar de top van de pagina
+    function getfollowing() {
+        if (followerdiv.style.display = "block") {
+            followerdiv.style.display = "none";
+            followingdiv.style.display = "block";
+        }
+        followingbtndiv.style.borderBottom = "solid #89B6A5 5px";
+        followerbtndiv.style.borderBottom = "none";
+    }
+</script>
+</body>
+</html>

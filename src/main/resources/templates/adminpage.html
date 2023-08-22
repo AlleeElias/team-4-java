@@ -1,0 +1,285 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" type="text/css" media="all"
+          th:href="@{/css/admin.css}" href="/css/admin.css"/>
+    <title>Admin only</title>
+    <div th:insert="fragments/head_foot :: headfrag"></div>
+</head>
+<body>
+<header th:replace="fragments/head_foot :: headerfrag"></header>
+<aside>
+    <div class="dropdown filterContainer position-fixed">
+        <button onclick="filterBTN()" type="button" class="btn btn-dark" data-toggle="collapse" href="#collapseExample"
+                role="button"
+                aria-expanded="false" aria-controls="collapseExample" id="btnFilters">+
+        </button>
+        <div class="collapse" id="collapseExample">
+            <form class="card card-body scroll">
+                <label for="username">Search by user:</label>
+                <input th:if="${namefound==null}" type="text" placeholder="eg. Elias" name="username" id="username">
+                <input th:if="${namefound!=null}" type="text" th:value="${namefound}" name="username" id="username">
+                <button type="submit" class="btn-dark borderBtn">Zoek!</button>
+            </form>
+        </div>
+    </div>
+</aside>
+<script>
+    //Buttons voor het veranderen van de view
+    function showUsers(){
+        let divUsers=document.getElementById("users");
+        let divKleding=document.getElementById("clothes");
+        let divPosts=document.getElementById("posts");
+        let divComments=document.getElementById("comments");
+        divUsers.style.display="block";
+        divKleding.style.display="none";
+        divPosts.style.display="none";
+        divComments.style.display="none";
+    };
+    function showKleding(){
+        let divUsers=document.getElementById("users");
+        let divKleding=document.getElementById("clothes");
+        let divPosts=document.getElementById("posts");
+        let divComments=document.getElementById("comments");
+        divUsers.style.display="none";
+        divKleding.style.display="block";
+        divPosts.style.display="none";
+        divComments.style.display="none";
+    };
+    function showPosts(){
+        let divUsers=document.getElementById("users");
+        let divKleding=document.getElementById("clothes");
+        let divPosts=document.getElementById("posts");
+        let divComments=document.getElementById("comments");
+        divUsers.style.display="none";
+        divKleding.style.display="none";
+        divPosts.style.display="block";
+        divComments.style.display="none";
+    };
+    function showComments(){
+        let divUsers=document.getElementById("users");
+        let divKleding=document.getElementById("clothes");
+        let divPosts=document.getElementById("posts");
+        let divComments=document.getElementById("comments");
+        divUsers.style.display="none";
+        divKleding.style.display="none";
+        divPosts.style.display="none";
+        divComments.style.display="block";
+    };
+    //Gefilterde switches
+    function showFilteredKleding(){
+        let divKleding=document.getElementById("filteredclothes");
+        let divPosts=document.getElementById("filteredposts");
+        let divComments=document.getElementById("filteredcomments");
+        divKleding.style.display="block";
+        divPosts.style.display="none";
+        divComments.style.display="none";
+    };
+    function showFilteredPosts(){
+        let divKleding=document.getElementById("filteredclothes");
+        let divPosts=document.getElementById("filteredposts");
+        let divComments=document.getElementById("filteredcomments");
+        divKleding.style.display="none";
+        divPosts.style.display="block";
+        divComments.style.display="none";
+    };
+    function showFilteredComments(){
+        let divKleding=document.getElementById("filteredclothes");
+        let divPosts=document.getElementById("filteredposts");
+        let divComments=document.getElementById("filteredcomments");
+        divKleding.style.display="none";
+        divPosts.style.display="none";
+        divComments.style.display="block";
+    };
+
+    //Om het plusje in een minnetje te zetten en omgekeerd
+    function filterBTN() {
+        var btnFilters = document.getElementById("btnFilters");
+        if (btnFilters.innerText == "+") {
+            btnFilters.innerText = "-";
+        } else {
+            btnFilters.innerText = "+";
+        }
+    };
+
+    function showFilters() {
+        var btn = document.getElementsByClassName("btnFilter")[0];
+        var x = document.getElementsByClassName("filters")[0];
+        console.log("function");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+<main sec:authorize="hasAuthority('admin')">
+    <article th:if="${namefound==null}">
+        <section>
+            <button class="btn-dark borderBtn" onclick="showUsers()" type="button" th:if="${namefound==null}">Gebruikers</button>
+            <button class="btn-dark borderBtn" onclick="showKleding()" type="button">Kleding</button>
+            <button class="btn-dark borderBtn" onclick="showPosts()" type="button">Posts</button>
+            <button class="btn-dark borderBtn" onclick="showComments()" type="button">Comments</button>
+        </section>
+        <section class="containerCss" id="users">
+            <h1>USERS</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>credit</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fashposter : ${fashposters}">
+                    <td th:text="${fashposter.getId()}"></td>
+                    <td th:text="${fashposter.getUsername()}"></td>
+                    <td style="width: 150px">
+                        <form style="width:50px">
+                            <input style="display: none" type="number" th:value="${fashposter.getId()}" name="id">
+                            <input style="width: 50px;" type="number"
+                                   th:value="${fashposter.getPost_allowance()}"
+                                   name="postallow">
+                            <button class="btn-dark borderBtn" type="submit">save</button>
+                        </form>
+                    </td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deleteUser/${fashposter.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="containerCss" id="clothes" style="display: none">
+            <h1>CLOTHES</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${fashclothes}">
+                    <td th:text="${item.getId()}"></td>
+                    <td th:text="${item.getNaam()}"></td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deleteItem/${item.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="containerCss" id="posts" style="display: none">
+            <h1>POSTS</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fashpost : ${fashposts}">
+                    <td th:text="${fashpost.getId()}"></td>
+                    <td th:text="${fashpost.getPoster().getUsername()}"></td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deletePost/${fashpost.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="containerCss" id="comments" style="display: none">
+            <h1>COMMENTS</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Text</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fashComment : ${comments}">
+                    <td th:text="${fashComment.getId()}"></td>
+                    <td th:text="${fashComment.getText()}"></td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deleteComment/${fashComment.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+    <article th:if="${namefound!=null}">
+        <section>
+            <button class="btn-dark borderBtn" type="button" th:if="${namefound==null}">Gebruikers</button>
+            <button class="btn-dark borderBtn" onclick="showFilteredKleding()" type="button">Kleding</button>
+            <button class="btn-dark borderBtn" onclick="showFilteredPosts()" type="button">Posts</button>
+            <button class="btn-dark borderBtn" onclick="showFilteredComments()" type="button">Comments</button>
+        </section>
+        <section class="containerCss" id="filteredclothes" style="display: none">
+            <h1>CLOTHES</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${fashclothes}">
+                    <td th:text="${item.getId()}"></td>
+                    <td th:text="${item.getNaam()}"></td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deleteItem/${item.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="containerCss" id="filteredposts">
+            <h1>POSTS</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fashpost : ${fashposts}">
+                    <td th:text="${fashpost.getId()}"></td>
+                    <td th:text="${fashpost.getPoster().getUsername()}"></td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deletePost/${fashpost.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="containerCss" id="filteredcomments" style="display: none">
+            <h1>COMMENTS</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>delete?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fashComment : ${comments}">
+                    <td th:text="${fashComment.getId()}"></td>
+                    <td th:text="${fashComment.getUser().getId()}"></td>
+                    <td class="btn-dark borderBtn" th:href="@{|/deleteComment/${fashComment.getId()}|}">DELETE</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+</main>
+<main sec:authorize="!hasAuthority('admin')">
+    <h1>
+        GEEN TOEGANG!
+    </h1>
+</main>
+<footer th:replace="fragments/head_foot :: footerfrag"></footer>
+</body>
+</html>

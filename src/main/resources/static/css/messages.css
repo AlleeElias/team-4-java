@@ -1,0 +1,145 @@
+.receivedMessage{
+    text-align: left;
+    margin-right: auto;
+    background-color: #89B6A5;
+    color: black;
+    width: fit-content;
+    border-radius: 5px;
+    margin-left: 5px;
+    padding: 15px;
+    margin-bottom: 5px;
+}
+.receivedMessage{
+    font-size: small;
+    color:white;
+}
+.sentMessage{
+    text-align: right;
+    margin-left: auto;
+    margin-right: 5px;
+    color:black;
+    background-color: lightgray;
+    width: fit-content;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 5px;
+}
+.sentMessage h3{
+    font-size: small;
+    color: black;
+}
+.receivedMessage h3{
+    font-size: small;
+    color: black;
+}
+.messageForm{
+    grid-area: gform;
+    width: 100%;
+    display: flex; !important;
+}
+.messageForm input{
+    width: available;
+}
+.messageForm button{
+    width: 100px;
+}
+.message{
+    display: flex;
+    width: available;
+}
+.messages{
+    grid-area: gmessages;
+    width: available;
+    background-color:white;
+    overflow:scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.messages::-webkit-scrollbar{
+    display: none;
+}
+.messagemain{
+    display: grid;
+    margin-top:75px;!important;
+    grid-template-areas: 'gbuttons' 'gmessages' 'gform';
+    grid-template-rows: 35px 75vh 50px;
+    background-color: white;
+    overflow:scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    padding-bottom: 100px;
+}
+@media screen and (min-width: 760px) {
+    .messagemain{
+        margin-left: 25%;
+        margin-right: 25%;
+        width: 50%;
+        margin-top: 75px;!important;
+        height: available;!important;
+    }
+}
+@media screen and (max-width: 760px){
+    .messagemain{
+        margin-bottom: 125px;!important;
+    }
+}
+@media screen and (max-width: 760px) and (max-height: 760px){
+    .messagemain{
+        margin-top: 50px;!important;
+        height: available;!important;
+        margin-bottom: 100px;!important;
+    }
+}
+.messagemain::-webkit-scrollbar{
+    display: none;
+}
+.messagebody{
+    height: 100vh; !important;
+    overflow: hidden;
+    background-color: white;
+}
+.messageAddUser{
+    align-self: flex-end;
+    width: available;
+}
+.convoList{
+    width: available;
+    background-color: white;
+    overflow:scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.convoList::-webkit-scrollbar{
+    display: none;
+}
+.messagelistbody{
+    background-color: white;
+}
+.convoList a{
+    margin-top: 5px;
+    width: 100%;
+}
+.backbuttonMessages{
+    width: 100px;
+    margin-left: 0;
+    margin-right: auto;
+}
+.messageAddUser{
+    margin-right: 0;
+    margin-left: auto;
+}
+.messageButtonsTop form{
+    width: available;
+}
+.messageButtonsTop form select{
+    width: available;
+}
+.messageButtonsTop{
+    grid-area: gbuttons;
+    width: 100%;
+    display: flex;
+}
+.btnToggler{
+    width: 100%;
+    border-bottom: solid #89B6A5 5px !important;
+}
